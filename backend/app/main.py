@@ -13,12 +13,17 @@ from app.services.analytics import analytics_payload, dashboard_metrics
 from app.services.reports import employees_csv, pdf_report
 from ml.predict import AttritionPredictor
 from ml.train import DATASET_PATH, make_synthetic_dataset
+import os
 
 app = FastAPI(title="AI Employee Attrition Analytics Platform", version="1.0.0")
 
+
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[FRONTEND_URL, "http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
