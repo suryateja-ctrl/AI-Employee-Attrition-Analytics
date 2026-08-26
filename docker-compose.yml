@@ -1,0 +1,36 @@
+services:
+  backend:
+    build: ./backend
+    environment:
+      SECRET_KEY: change-me
+      ADMIN_EMAIL: admin@hr.local
+      ADMIN_PASSWORD: admin123
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/dataset:/app/dataset
+      - ./backend/saved_models:/app/saved_models
+      - ./backend/reports:/app/reports
+
+  frontend:
+    build: ./frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: attrition
+      POSTGRES_USER: attrition
+      POSTGRES_PASSWORD: attrition
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
